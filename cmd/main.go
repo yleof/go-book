@@ -11,7 +11,8 @@ import (
 func main() {
 	router := mux.NewRouter()
 
-	router.HandleFunc("/books", handlers.GetAllBooks)
+	router.HandleFunc("/books", handlers.GetAllBooks).Methods("GET")
+	router.HandleFunc("/books", handlers.AddBook).Methods("POST")
 
 	log.Println("API is running")
 	http.ListenAndServe(":4000", router)
