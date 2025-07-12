@@ -12,6 +12,7 @@ func main() {
 	router := mux.NewRouter()
 
 	router.HandleFunc("/books", handlers.GetAllBooks).Methods("GET")
+	router.HandleFunc("/books/{id}", handlers.GetBook).Methods("GET") // Assuming you want to handle GET by ID as well
 	router.HandleFunc("/books", handlers.AddBook).Methods("POST")
 
 	log.Println("API is running")
