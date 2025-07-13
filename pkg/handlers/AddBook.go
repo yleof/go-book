@@ -2,15 +2,14 @@ package handlers
 
 import (
 	"encoding/json"
-	"gobook/pkg/mocks"
+	"fmt"
 	"gobook/pkg/models"
 	"io"
 	"log"
-	"math/rand"
 	"net/http"
 )
 
-func AddBook(w http.ResponseWriter, r *http.Request) {
+func (h handler) AddBook(w http.ResponseWriter, r *http.Request) {
 	// Read to request body
 	defer r.Body.Close()
 	body, err := io.ReadAll(r.Body)
@@ -23,9 +22,10 @@ func AddBook(w http.ResponseWriter, r *http.Request) {
 
 	json.Unmarshal(body, &book)
 
-	// Append to book mock
-	book.Id = rand.Intn(100)
-	mocks.Books = append(mocks.Books, book)
+	// save to DB
+	if result := h.DB.Create(&book); result.Error != nil {
+		fmt.Println(result.Error)
+	}
 
 	// Send 201 Created response
 	w.WriteHeader(http.StatusCreated)
